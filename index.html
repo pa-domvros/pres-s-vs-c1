@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Now & Always - Tense Practice</title>
+    <style>
+        /* --- General Styles --- */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #F5F5F9; /* Light lavender-grey */
+            color: #333;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 20px auto;
+            background: #E6E6FA; /* Lavender */
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        button.nav-button {
+            display: block;
+            width: 50%;
+            margin: 40px auto 10px auto;
+            padding: 20px;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+        .home-button {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            background: #9370DB; /* Medium Purple */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .home-button:hover {
+            background: #7B68EE;
+        }
+
+        /* --- Intro View Styles --- */
+        #intro-container { text-align: center; }
+        #intro-container h1 { color: #6A5ACD; font-size: 2.8em; margin-bottom: 10px; }
+        /* FIX 2: Style for new subtitle */
+        #intro-container .subtitle { font-size: 1.1em; font-weight: 400; color: #555; margin-top: 0; margin-bottom: 25px; }
+        #intro-container p { font-size: 1.2em; line-height: 1.6; margin-bottom: 30px; }
+        #intro-video-container {
+            /* FIX 1: Reduced video size */
+            max-width: 200px;
+            margin: 20px auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        #intro-video { width: 100%; }
+        #go-to-theory-btn { background-color: #8A2BE2; }
+        #go-to-theory-btn:hover { background-color: #9932CC; }
+
+        /* --- Theory View Styles (From rules.html) --- */
+        #theory-container .main-title { text-align: center; font-size: 2.5rem; font-weight: 700; color: #4a4a4a; margin-bottom: 2rem; }
+        #theory-container .main-title .simple-text { color: #d9534f; }
+        #theory-container .main-title .continuous-text { color: #8e44ad; }
+        #theory-container .columns-container { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; }
+        #theory-container .tense-column { background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); padding: 1.5rem; flex: 1; min-width: 300px; max-width: 400px; display: flex; flex-direction: column; gap: 1rem; }
+        #theory-container .column-header { text-align: center; padding: 0.75rem; border-radius: 8px; color: #fff; font-weight: 600; font-size: 1.25rem; }
+        #theory-container .simple .column-header, #theory-container .simple .rule-box, #theory-container .simple .use-title { background-color: #e88b3a; }
+        #theory-container .continuous .column-header, #theory-container .continuous .rule-box, #theory-container .continuous .use-title { background-color: #8e44ad; }
+        #theory-container .rule-box { text-align: center; padding: 0.75rem; border-radius: 8px; color: #fff; font-weight: 600; font-size: 1.1rem; }
+        #theory-container .use-card { display: flex; flex-direction: column; gap: 0.5rem; }
+        #theory-container .use-title { padding: 0.75rem; border-radius: 8px; color: #fff; font-weight: 600; text-align: center; }
+        #theory-container .use-example { padding: 0.5rem 0.75rem; background-color: #f9f9f9; border: 1px solid #eee; border-radius: 8px; font-size: 0.95rem; text-align: center; }
+        #start-practice-btn { background-color: #6A5ACD; }
+        #start-practice-btn:hover { background-color: #483D8B; }
+
+        /* --- App View Styles --- */
+        #app-container { max-width: 900px; padding: 0; background: #E6E6FA; }
+        .header { padding: 15px 25px; background-color: #8A2BE2; color: white; display: flex; justify-content: space-between; align-items: center; border-radius: 15px 15px 0 0;}
+        .header h1 { font-size: 1.8em; margin: 0; color: white; border: none; padding: 0; }
+        .header .progress, .header .score { font-size: 1.1em; font-weight: bold; background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 20px; }
+        .video-container { background-color: #000; position: relative; max-width: 600px; margin: 20px auto; }
+        video { width: 100%; display: block; border-radius: 8px;}
+        .quiz-container { padding: 25px; }
+        .sentence-line { margin-bottom: 20px; font-size: 1.2em; line-height: 1.6; }
+        .sentence-line input { font-size: 1em; padding: 8px; margin: 0 5px; border: 2px solid #ccc; border-radius: 6px; transition: border 0.2s; width: 150px; }
+        .input-prompt { font-size: 0.9em; color: #6A5ACD; font-style: italic; }
+        .action-bar { padding: 20px 25px; border-top: 1px solid #D8BFD8; text-align: center; }
+        .action-bar button { font-size: 1.2em; font-weight: bold; color: white; padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.3s; margin: 5px;}
+        #check-btn { background-color: #8A2BE2; }
+        #check-btn:hover { background-color: #6A5ACD; }
+        #next-btn { background-color: #388E3C; display: none; }
+        #next-btn:hover { background-color: #1B5E20; }
+        #skip-btn { background-color: #546E7A; }
+        #skip-btn:hover { background-color: #37474F; }
+        #show-answer-btn { background-color: #F57C00; display: none; }
+        #show-answer-btn:hover { background-color: #E65100; }
+        .feedback { margin-top: 15px; font-size: 1.2em; font-weight: bold; height: 25px; }
+        .correct { color: #2E7D32; }
+        .incorrect { color: #C62828; }
+        .incorrect-selection { border-color: #C62828 !important; border-width: 3px !important; }
+        
+        /* FIX 3: Info Icon and Modal Styles */
+        #info-icon {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #6A5ACD;
+            background-color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border: 2px solid #6A5ACD;
+            position: absolute;
+            top: 25px;
+            right: 25px;
+        }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); }
+        .modal-content { background-color: #fefefe; margin: 15% auto; padding: 20px 30px; border: 1px solid #888; width: 80%; max-width: 500px; border-radius: 10px; position: relative; }
+        .close-button { color: #aaa; position: absolute; top: 10px; right: 20px; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close-button:hover, .close-button:focus { color: black; }
+
+        footer { text-align: center; padding: 20px; margin-top: 30px; color: #546E7A; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+
+    <div id="intro-container" class="container">
+        <div id="info-icon">i</div>
+        <h1>Now & Always</h1>
+        <h2 class="subtitle">Practice the difference between the Simple Present and the Present Continuous</h2>
+        <div id="intro-video-container">
+            <video id="intro-video" src="0.mp4" autoplay loop muted playsinline></video>
+        </div>
+        <p><strong>He loves his wife but today they are fighting!</strong></p>
+        <button id="go-to-theory-btn" class="nav-button">Learn the Rules</button>
+    </div>
+
+    <div id="theory-container" class="container" style="display: none;">
+        <button id="home-from-theory-btn" class="home-button">Home</button>
+        <h1 class="main-title">
+            <span class="simple-text">PRESENT SIMPLE</span> & <span class="continuous-text">PRESENT CONTINUOUS</span>
+        </h1>
+        <div class="columns-container">
+            <div class="tense-column simple">
+                <div class="column-header">Present Simple</div>
+                <div class="rule-box">S + verb</div>
+                <div class="use-card"><div class="use-title">Express general truths</div><p class="use-example">E.g. It rarely rains in the desert.</p></div>
+                <div class="use-card"><div class="use-title">Indicate present habits</div><p class="use-example">E.g. The birds return to the island every morning.</p></div>
+                <div class="use-card"><div class="use-title">Express timetable events</div><p class="use-example">E.g. The plane to London takes off at 6:30 a.m.</p></div>
+                <div class="use-card"><div class="use-title">Indicate permanent states</div><p class="use-example">E.g. I like the new James Bond film.</p></div>
+            </div>
+            <div class="tense-column continuous">
+                <div class="column-header">Present Continuous</div>
+                <div class="rule-box">S + am/is/are (not) + V-ing</div>
+                <div class="use-card"><div class="use-title">Describe actions happening now</div><p class="use-example">E.g. She is reading a newspaper upstairs.</p></div>
+                <div class="use-card"><div class="use-title">Express annoying habits (+ always)</div><p class="use-example">E.g. You're always forgetting to pay the bills.</p></div>
+                <div class="use-card"><div class="use-title">Describe future arrangements (informal)</div><p class="use-example">E.g. She's getting married on 3 November.</p></div>
+                <div class="use-card"><div class="use-title">Express temporary states</div><p class="use-example">E.g. She's working at the museum until the end of this month.</p></div>
+            </div>
+        </div>
+        <button id="start-practice-btn" class="nav-button">Start Practice!</button>
+    </div>
+
+    <div id="app-container" class="container" style="display: none;">
+        <header class="header">
+            <button id="home-from-app-btn" class="home-button" style="position: static; margin-right: 15px;">Home</button>
+            <h1>Now & Always</h1>
+            <div class="progress" id="progress-indicator">Video 1 of 15</div>
+            <div class="score" id="score-indicator">Score: 0</div>
+        </header>
+        <div class="video-container"><video id="video-player" controls></video></div>
+        <div class="quiz-container">
+            <p class="sentence-line">
+                <span id="subject1"></span>
+                <input type="text" id="answer1" placeholder="verb...">
+                <span id="rest1"></span>
+                but
+                <span id="subject2"></span>
+                <input type="text" id="answer2" placeholder="verb...">
+                <span id="rest2"></span>.
+                <br>
+                <small class="input-prompt">
+                    Hint: (<span id="prompt1"></span>) and (<span id="prompt2"></span>)
+                </small>
+            </p>
+        </div>
+        <div class="action-bar">
+            <button id="check-btn">Check Answer</button>
+            <button id="show-answer-btn">Show Answer</button>
+            <button id="skip-btn">Skip Video</button>
+            <button id="next-btn">Next Video</button>
+        </div>
+        <div class="feedback" id="feedback-message"></div>
+    </div>
+    
+    <div id="info-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <p>The 24 videos in this activity can be further used by the teacher for various other areas of practice, like description vocabulary, prepositions, comparisons etc.</p>
+        </div>
+    </div>
+    
+    <footer>
+        ✨✍️ Devised by Panagiotis Domvros, English and Drama Teacher, All Rights Reserved ✍️✨
+    </footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const exercises = [
+            { video: 1, s1: 'He', v1: 'builds', r1: 'houses every day', p1: 'build', s2: 'he', v2: 'is working', r2: 'now', p2: 'work' },
+            { video: 2, s1: 'She', v1: 'goes', r1: 'to school every day', p1: 'go', s2: 'she', v2: 'is playing', r2: 'tennis now', p2: 'play' },
+            { video: 3, s1: 'They', v1: 'take', r1: 'the bus to work every day', p1: 'take', s2: 'they', v2: 'are walking', r2: 'to the park now', p2: 'walk' },
+            { video: 4, s1: 'He', v1: 'teaches', r1: 'English every day', p1: 'teach', s2: 'he', v2: 'is having', r2: 'coffee now', p2: 'have' },
+            { video: 5, s1: 'She', v1: 'directs', r1: 'traffic every day', p1: 'direct', s2: 'she', v2: 'is playing', r2: 'with her son in the park now', p2: 'play' },
+            { video: 6, s1: 'They', v1: 'go', r1: 'to Italy every summer', p1: 'go', s2: 'this summer they', v2: 'are going', r2: 'to Greece', p2: 'go' },
+            { video: 7, s1: 'She', v1: 'does', r1: 'her homework in the afternoon every day', p1: 'do', s2: 'today she', v2: 'is going', r2: 'to a football game', p2: 'go' },
+            { video: 8, s1: 'He', v1: 'fixes', r1: 'cars in the morning', p1: 'fix', s2: 'now he', v2: 'is having', r2: 'a drink at the pub', p2: 'have' },
+            { video: 9, s1: 'Pericles', v1: 'talks', r1: 'to Athenians in the mornings', p1: 'talk', s2: 'he', v2: 'is sitting', r2: 'with Aspasia in the palace now', p2: 'sit' },
+            { video: 10, s1: 'Leonidas', v1: 'fights', r1: 'battles every day', p1: 'fight', s2: 'now he', v2: 'is playing', r2: 'with his baby son', p2: 'play' },
+            { video: 11, s1: 'The dog', v1: 'usually sleeps', r1: '', p1: 'usually sleep', s2: 'he', v2: 'is playing', r2: 'with a ball now', p2: 'play' },
+            { video: 12, s1: 'It', v1: 'is usually sunny', r1: 'every day in the summer', p1: 'usually be sunny', s2: 'it', v2: 'is raining', r2: 'very hard now', p2: 'rain' },
+            { video: 13, s1: 'We', v1: 'usually eat', r1: 'at home', p1: 'usually eat', s2: 'today we', v2: 'are eating', r2: 'in a restaurant', p2: 'eat' },
+            { video: 14, s1: 'She', v1: 'often goes', r1: 'to the supermarket', p1: 'often go', s2: 'today she', v2: 'is shopping', r2: 'at the open air market', p2: 'shop' },
+            { video: 15, s1: 'I', v1: 'do', r1: 'my homework in the evening every day', p1: 'do', s2: 'today I', v2: 'am going', r2: 'to the concert with my friends', p2: 'go' }
+        ];
+
+        // --- DOM ELEMENTS ---
+        const introContainer = document.getElementById('intro-container');
+        const theoryContainer = document.getElementById('theory-container');
+        const appContainer = document.getElementById('app-container');
+        const goToTheoryBtn = document.getElementById('go-to-theory-btn');
+        const startPracticeBtn = document.getElementById('start-practice-btn');
+        const homeFromTheoryBtn = document.getElementById('home-from-theory-btn');
+        const homeFromAppBtn = document.getElementById('home-from-app-btn');
+        const videoPlayer = document.getElementById('video-player');
+        const progressIndicator = document.getElementById('progress-indicator');
+        const scoreIndicator = document.getElementById('score-indicator');
+        const feedbackMessage = document.getElementById('feedback-message');
+        const checkBtn = document.getElementById('check-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const skipBtn = document.getElementById('skip-btn');
+        const showAnswerBtn = document.getElementById('show-answer-btn');
+        const subject1 = document.getElementById('subject1');
+        const answer1 = document.getElementById('answer1');
+        const rest1 = document.getElementById('rest1');
+        const prompt1 = document.getElementById('prompt1');
+        const subject2 = document.getElementById('subject2');
+        const answer2 = document.getElementById('answer2');
+        const rest2 = document.getElementById('rest2');
+        const prompt2 = document.getElementById('prompt2');
+        const infoIcon = document.getElementById('info-icon');
+        const infoModal = document.getElementById('info-modal');
+        const closeButton = document.querySelector('.close-button');
+
+        // --- APP STATE ---
+        let currentExerciseIndex = 0;
+        let score = 0;
+
+        // --- FUNCTIONS ---
+        function loadExercise(index) {
+            const ex = exercises[index];
+            
+            let videoFolder;
+            if (ex.video <= 5) { videoFolder = '1'; } 
+            else if (ex.video <= 10) { videoFolder = '2'; } 
+            else { videoFolder = '3'; }
+            videoPlayer.src = `${videoFolder}/${ex.video}.mp4`;
+
+            progressIndicator.textContent = `Video ${index + 1} of ${exercises.length}`;
+            feedbackMessage.textContent = '';
+            
+            answer1.value = '';
+            answer2.value = '';
+            answer1.classList.remove('incorrect-selection');
+            answer2.classList.remove('incorrect-selection');
+
+            checkBtn.style.display = 'inline-block';
+            showAnswerBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
+
+            subject1.textContent = ex.s1;
+            rest1.textContent = ex.r1;
+            prompt1.textContent = ex.p1;
+            subject2.textContent = ex.s2;
+            rest2.textContent = ex.r2;
+            prompt2.textContent = ex.p2;
+        }
+
+        function checkAnswer() {
+            const ex = exercises[currentExerciseIndex];
+            let isFullyCorrect = true;
+
+            answer1.classList.remove('incorrect-selection');
+            answer2.classList.remove('incorrect-selection');
+            showAnswerBtn.style.display = 'none';
+
+            if (answer1.value.trim().toLowerCase() !== ex.v1) {
+                answer1.classList.add('incorrect-selection');
+                isFullyCorrect = false;
+            }
+            if (answer2.value.trim().toLowerCase() !== ex.v2) {
+                answer2.classList.add('incorrect-selection');
+                isFullyCorrect = false;
+            }
+
+            if (isFullyCorrect) {
+                feedbackMessage.textContent = 'Correct! Well done!';
+                feedbackMessage.className = 'feedback correct';
+                score += 10;
+                scoreIndicator.textContent = `Score: ${score}`;
+                checkBtn.style.display = 'none';
+                nextBtn.style.display = 'inline-block';
+            } else {
+                feedbackMessage.textContent = 'Not quite, check the red boxes or click "Show Answer".';
+                feedbackMessage.className = 'feedback incorrect';
+                showAnswerBtn.style.display = 'inline-block';
+            }
+        }
+        
+        function showTheAnswer() {
+            const ex = exercises[currentExerciseIndex];
+            answer1.value = ex.v1;
+            answer2.value = ex.v2;
+            answer1.classList.remove('incorrect-selection');
+            answer2.classList.remove('incorrect-selection');
+            feedbackMessage.textContent = 'Here is the correct answer. Click "Next Video" to continue.';
+            feedbackMessage.className = 'feedback';
+            checkBtn.style.display = 'none';
+            showAnswerBtn.style.display = 'none';
+            nextBtn.style.display = 'inline-block';
+        }
+        
+        function nextExercise() {
+            currentExerciseIndex++;
+            if (currentExerciseIndex < exercises.length) {
+                loadExercise(currentExerciseIndex);
+            } else {
+                appContainer.innerHTML = `<div style="padding: 40px; text-align:center;"><h1>Congratulations!</h1><p style="font-size: 1.5em;">You have completed all exercises.<br>Your final score is: ${score}</p></div>`;
+            }
+        }
+
+        function goToHome() {
+            theoryContainer.style.display = 'none';
+            appContainer.style.display = 'none';
+            introContainer.style.display = 'block';
+            
+            if (currentExerciseIndex > 0 || score > 0) {
+                currentExerciseIndex = 0;
+                score = 0;
+                scoreIndicator.textContent = `Score: 0`;
+            }
+        }
+
+        // --- EVENT LISTENERS ---
+        goToTheoryBtn.addEventListener('click', () => {
+            introContainer.style.display = 'none';
+            theoryContainer.style.display = 'block';
+        });
+
+        startPracticeBtn.addEventListener('click', () => {
+            theoryContainer.style.display = 'none';
+            appContainer.style.display = 'block';
+            loadExercise(currentExerciseIndex);
+        });
+
+        homeFromTheoryBtn.addEventListener('click', goToHome);
+        homeFromAppBtn.addEventListener('click', goToHome);
+
+        checkBtn.addEventListener('click', checkAnswer);
+        nextBtn.addEventListener('click', nextExercise);
+        skipBtn.addEventListener('click', nextExercise);
+        showAnswerBtn.addEventListener('click', showTheAnswer);
+
+        infoIcon.addEventListener('click', () => { infoModal.style.display = 'block'; });
+        closeButton.addEventListener('click', () => { infoModal.style.display = 'none'; });
+        window.addEventListener('click', (event) => {
+            if (event.target == infoModal) {
+                infoModal.style.display = 'none';
+            }
+        });
+    });
+</script>
+</body>
+</html>
